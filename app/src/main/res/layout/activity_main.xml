@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:weightSum="1"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/data"
+        android:padding="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.83"
+        android:layout_width="match_parent"
+        android:textColor="#FFF"
+        android:background="@drawable/scrollview"
+        android:hint="@string/paste"
+        android:textColorHint="#CCC"
+        android:importantForAutofill="no"
+        tools:ignore="TextFields" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.02"/>
+
+    <TextView
+        android:id="@+id/convert"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:text="@string/convert"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:background="@drawable/button"/>
+
+    <TextView
+        android:id="@+id/company"
+        android:gravity="center"
+        android:textColor="#DDD"
+        android:text="@string/company"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"/>
+
+</LinearLayout>
