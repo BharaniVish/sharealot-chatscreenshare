@@ -24,9 +24,17 @@ public class MainActivity extends Activity {
 
         convertObj.setOnClickListener(view -> {
             String data = dataObj.getText().toString();
-            Intent intent = new Intent(this, FormattedPage.class);
-            intent.putExtra("chatData", data);
-            startActivity(intent);
+
+            if (data.charAt(0)!='[') {
+                Toast.makeText(this, "Invalid format. Please copy some chats first.", Toast.LENGTH_SHORT).show();
+                dataObj.setText("");
+            }
+
+            else {
+                Intent intent = new Intent(this, FormattedPage.class);
+                intent.putExtra("chatData", data);
+                startActivity(intent);
+            }
         });
 
         companyNameObj.setOnClickListener(view -> {
