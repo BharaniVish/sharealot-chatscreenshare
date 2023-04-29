@@ -10,6 +10,7 @@
     android:background="@drawable/wallpaper">
 
     <ScrollView
+        android:id="@+id/chatScrollLayout"
         android:layout_height="0dp"
         android:layout_weight="0.83"
         android:layout_width="match_parent"

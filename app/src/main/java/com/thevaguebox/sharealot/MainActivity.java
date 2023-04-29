@@ -37,14 +37,14 @@ public class MainActivity extends Activity {
             }
         });
 
-        companyNameObj.setOnClickListener(view -> {
+        /* companyNameObj.setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.addCategory(Intent.CATEGORY_BROWSABLE);
             intent.setData(Uri.parse("https://play.google.com/store/apps/dev?id=8908431179062757410"));
             Toast.makeText(this, "Opening Google PlayStore", Toast.LENGTH_SHORT).show();
             startActivity(intent);
-        });
+        }); */
 
     }
 }

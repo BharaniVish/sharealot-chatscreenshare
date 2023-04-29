@@ -2,15 +2,28 @@ package com.thevaguebox.sharealot;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Typeface;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.itextpdf.text.Document;
+
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.ByteArrayOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class FormattedPage extends Activity {
@@ -185,23 +198,65 @@ public class FormattedPage extends Activity {
 
         generateObj.setOnClickListener(view -> {
             //Convert the Layout to PDF
-            Toast.makeText(this, "Error saving the file, please grant permissions", Toast.LENGTH_SHORT).show();
-        });
-
-        companyNameObj.setOnClickListener(view -> {
-            String link = "https://play.google.com/store/apps/dev?id=8908431179062757410";
-            String toastMessage = "Opening Google PlayStore";
-            hyperlinkClick (link, toastMessage);
+            convertLayoutToPdf();
         });
     }
 
-    public void hyperlinkClick (String link, String toastMessage) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-        intent.setData(Uri.parse(link));
-        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
-        startActivity(intent);
+
+
+    private void convertLayoutToPdf() {
+        Document document = new Document(PageSize.A4, 0, 0, 0, 0);
+        String fileName = "sal_css"+System.currentTimeMillis()/1000+".pdf";
+        String filePath = Environment.getExternalStorageDirectory().getPath() + "/" + fileName;
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                PdfWriter.getInstance(document, Files.newOutputStream(Paths.get(filePath)));
+            }
+            document.open();
+
+            ScrollView layout = findViewById(R.id.chatScrollLayout);
+
+            // Get the height of the layout
+            int height = layout.getHeight();
+
+            // Create a bitmap with the same height
+            Bitmap bitmap = Bitmap.createBitmap(layout.getWidth(), height, Bitmap.Config.ARGB_8888);
+
+            // Draw the layout onto the bitmap
+            Canvas canvas = new Canvas(bitmap);
+            layout.draw(canvas);
+
+            // Calculate the number of pages needed
+            int pageCount = (int) Math.ceil(height / document.getPageSize().getHeight());
+
+            // Add the bitmap to each page
+            for (int i = 0; i < pageCount; i++) {
+                if (i > 0) {
+                    addNewPage(document);
+                }
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                document.add(com.itextpdf.text.Image.getInstance(byteArray));
+            }
+
+            // Close the document
+            document.close();
+            Toast.makeText(this, "PDF created", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Toast.makeText(this, "Error creating the PDF", Toast.LENGTH_SHORT).show();
+            Log.e("ERROR!!!", String.valueOf(e));
+        }
+    }
+
+    private void addNewPage(Document document) {
+        if (document.isOpen()) {
+            document.newPage();
+        }
     }
 
 }
